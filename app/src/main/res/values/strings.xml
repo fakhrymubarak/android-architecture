@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">android-architecture</string>
+    <string name="cd_loading_background">Loading Background</string>
+    <string name="cd_movie_poster">Movie Poster</string>
+</resources>
