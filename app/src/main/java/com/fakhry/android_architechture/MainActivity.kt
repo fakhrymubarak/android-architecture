@@ -2,6 +2,7 @@ package com.fakhry.android_architechture
 
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -33,12 +34,25 @@ class MainActivity : AppCompatActivity() {
         movieAdapter.onItemClick = { movie ->
             showToast("Clicked: ${movie.title}")
         }
+
+        binding.svMovie.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) viewModel.searchMovie(query)
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null) viewModel.searchMovie(query)
+                return true
+            }
+        })
     }
 
     private fun initViewModel() {
         showLoading(true)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.getAllMovies().observe(this) { response ->
+        viewModel.getAllMovies()
+        viewModel.listMovie.observe(this) { response ->
             when (response.status) {
                 ResponseStatus.SUCCESS -> {
                     showLoading(false)
@@ -60,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setListMovie(data: List<MovieData>) {
         movieAdapter.setData(data)
-        movieAdapter.notifyItemInserted(0)
+        movieAdapter.notifyDataSetChanged()
     }
 
     private fun showToast(message: String?) {

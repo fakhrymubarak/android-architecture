@@ -13,9 +13,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel : ViewModel() {
-    fun getAllMovies(): LiveData<ApiResponse<List<MovieData>>> {
-        val resultResponse = MutableLiveData<ApiResponse<List<MovieData>>>()
+    private val _listAllMovie = MutableLiveData<ApiResponse<List<MovieData>>>()
+    private val listAllMovie: LiveData<ApiResponse<List<MovieData>>> = _listAllMovie
 
+    private val _listMovie = MutableLiveData<ApiResponse<List<MovieData>>>()
+    val listMovie: LiveData<ApiResponse<List<MovieData>>> = _listMovie
+
+    fun getAllMovies() {
         ApiConfig.getApiService().getMovPlayings().enqueue(object : Callback<MovieResponse> {
             override fun onResponse(
                 call: Call<MovieResponse>,
@@ -32,23 +36,33 @@ class MainViewModel : ViewModel() {
                             ApiResponse.success(data)
                         }
 
-                        resultResponse.postValue(apiResponse)
+                        _listAllMovie.postValue(apiResponse)
+                        _listMovie.postValue(apiResponse)
                     } else {
                         Log.e(TAG, "responseBodyNull: ${response.message()}")
-                        resultResponse.postValue(ApiResponse.error(response.message(), emptyList()))
+                        _listMovie.postValue(ApiResponse.error(response.message(), emptyList()))
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
-                    resultResponse.postValue(ApiResponse.error(response.message(), emptyList()))
+                    _listMovie.postValue(ApiResponse.error(response.message(), emptyList()))
                 }
             }
 
             override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: ${t.message.toString()}")
-                resultResponse.postValue(ApiResponse.error(t.message.toString(), emptyList()))
+                _listMovie.postValue(ApiResponse.error(t.message.toString(), emptyList()))
             }
         })
-        return resultResponse
+    }
+
+    fun searchMovie(query: String) {
+        var listMovie = listAllMovie.value!!.body
+
+        listMovie = listMovie.filter { movie ->
+            movie.title.contains(query, true)
+        }
+
+        _listMovie.postValue(ApiResponse.success(listMovie))
     }
 
     companion object {

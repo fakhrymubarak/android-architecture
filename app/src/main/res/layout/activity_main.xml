@@ -10,21 +10,25 @@
         android:id="@+id/rv_movie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/sv_movie"
+        tools:listitem="@layout/item_movie" />
 
     <ImageView
         android:id="@+id/img_transparent"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/cd_loading_background"
         android:src="@color/black_transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/cd_loading_background" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
         android:id="@+id/pb_loading"
@@ -35,4 +39,14 @@
         app:layout_constraintEnd_toEndOf="@+id/img_transparent"
         app:layout_constraintStart_toStartOf="@+id/img_transparent"
         app:layout_constraintTop_toTopOf="@+id/img_transparent" />
+
+    <SearchView
+        android:id="@+id/sv_movie"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
